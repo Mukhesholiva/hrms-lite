@@ -32,13 +32,22 @@ function Dashboard() {
     fetchData()
   }, [])
 
+  const today = new Date().toLocaleDateString('en-US', {
+    weekday: 'long',
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric'
+  })
+
   if (loading) return <div className="loading">Loading...</div>
 
   return (
     <div>
       <div className="page-header">
-        <h1>Dashboard</h1>
-        <p>Overview of your HR system</p>
+        <div>
+          <h1>Dashboard</h1>
+          <p>{today}</p>
+        </div>
       </div>
 
       <div className="stats-grid">
@@ -57,16 +66,26 @@ function Dashboard() {
       </div>
 
       <div className="card">
-        <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 16 }}>
-          <h3>Recent Employees</h3>
-          <Link to="/employees" className="btn btn-secondary">View All</Link>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 20 }}>
+          <h3 style={{ fontSize: '1rem', fontWeight: 600 }}>Recent Employees</h3>
+          <Link to="/employees" className="btn btn-secondary" style={{ padding: '8px 16px', fontSize: '0.85rem' }}>
+            View All
+          </Link>
         </div>
         {employees.length === 0 ? (
-          <div className="empty-state">No employees yet</div>
+          <div className="empty-state">
+            <p>No employees added yet</p>
+            <Link to="/employees" className="btn btn-primary">Add Employee</Link>
+          </div>
         ) : (
           <table>
             <thead>
-              <tr><th>ID</th><th>Name</th><th>Department</th><th>Email</th></tr>
+              <tr>
+                <th>Employee ID</th>
+                <th>Name</th>
+                <th>Department</th>
+                <th>Email</th>
+              </tr>
             </thead>
             <tbody>
               {employees.map(e => (
@@ -74,7 +93,7 @@ function Dashboard() {
                   <td><strong>{e.employee_id}</strong></td>
                   <td>{e.full_name}</td>
                   <td>{e.department}</td>
-                  <td>{e.email}</td>
+                  <td style={{ color: 'var(--text-light)' }}>{e.email}</td>
                 </tr>
               ))}
             </tbody>

@@ -51,11 +51,17 @@ function Attendance() {
     setSummary(res.data)
   }
 
+  const today = new Date().toISOString().split('T')[0]
+
   const handleSubmit = async (e) => {
     e.preventDefault()
     setError('')
     if (!form.employee_id || !form.date) {
       setError('Please select an employee and date')
+      return
+    }
+    if (form.date > today) {
+      setError('Cannot mark attendance for future dates')
       return
     }
     try {
@@ -263,7 +269,12 @@ function Attendance() {
               </div>
               <div className="form-group">
                 <label>Date</label>
-                <input type="date" value={form.date} onChange={e => setForm({...form, date: e.target.value})} />
+                <input
+                  type="date"
+                  value={form.date}
+                  max={today}
+                  onChange={e => setForm({...form, date: e.target.value})}
+                />
               </div>
               <div className="form-group">
                 <label>Status</label>
